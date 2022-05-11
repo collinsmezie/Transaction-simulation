@@ -35,6 +35,8 @@ const deposit = () => {
       if (user.name === accName.value) {
         user.balance += Number(amountAdded.value);
         msgDeposit.innerHTML = 'Success!';
+        msgDeposit.style.color = "green"
+
       }
     });
     localStorage.setItem('accountUsers', JSON.stringify(users));
@@ -53,9 +55,11 @@ const withdraw = () => {
           user.balance -= Number(amountWithdrawed.value);
           msgWithdraw.innerHTML = 'Withdraw Successful!';
           msgWithdraw.style.color = "green"
+
         } else {
           msgWithdraw.innerHTML = 'Insufficient funds';
           msgWithdraw.style.color = "red"
+
         }
       }
     });
@@ -79,25 +83,31 @@ const transfer = (sender, receipient) => {
       }
     });
 
-    if (sender.value === receipient.value) {
-       msgTransfer.innerHTML = 'Please Select a recipient';
+    if(amountTransfer.value === ""){
+       msgTransfer.innerHTML = 'Enter Amount';
        msgTransfer.style.color = "red"
-       return
-    }else{
+
+
+    }else if (sender.value === receipient.value) {
+       msgTransfer.innerHTML = 'Please Select another Recipient';
+       msgTransfer.style.color = "red"
+
       
-      if (storeSender.balance < Number(amountTransfer.value)) {
+    }else if (storeSender.balance < Number(amountTransfer.value)) {
         msgTransfer.innerHTML = 'Insufficient funds';
         msgTransfer.style.color = "red"
-      } else {
+
+        
+    }else {
         storeSender.balance -= Number(amountTransfer.value);
         storeReceipient.balance += Number(amountTransfer.value);
-        msgTransfer.innerHTML = 'Tranfer Successful!';
+        msgTransfer.innerHTML = 'Transfer Successful!';
         msgTransfer.style.color = "green"
-      }
-      localStorage.setItem('accountUsers', JSON.stringify(users));
-      displayBalance();
-    }    
-});
+        localStorage.setItem('accountUsers', JSON.stringify(users));
+        displayBalance();
+    }
+    
+      });
 
 };
 transfer(transferFrom, transferTo);

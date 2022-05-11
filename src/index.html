@@ -1,12 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wbpack Exercise</title>
+    <title>Js_bank</title>
 </head>
+
 <body>
-    <h1>Hello webpacks!</h1>
-    <p>you are doing well</p>
+
+    <div class="flex">
+        <div class="element-center">
+            <!-- Wanjiru, Juma, and Linda. -->
+            <div id="inputs">
+                <div id="deposit">
+                    <h2>
+                        Deposit
+                    </h2>
+                    <label for="userDepositName">Choose Account:</label> <br>
+                    <select id="userDepositName" name="ddlDeposit">
+                        <option value="Wanjiru">Wanjiru</option>
+                        <option value="Juma">Juma</option>
+                        <option value="Linda">Linda</option>
+                    </select> <br>
+                    <input type="number" id="userDeposit" placeholder="Amount" required>
+                    <button type="submit" value="Submit" id="btnDeposit">Deposit</button>
+                    <div class="msgDeposit"></div>
+                </div>
+
+                <div id="withdraw">
+                    <h2>
+                        Withdraw
+                    </h2>
+                    <label for="userWithdraw">Choose Account:</label>
+                    <select id="userWithdraw">
+                        <option value="Wanjiru">Wanjiru</option>
+                        <option value="Juma">Juma</option>
+                        <option value="Linda">Linda</option>
+                    </select> <br>
+                    <input type="text" id="amountWithdrawed" placeholder="Amount" required>
+                    <button type="submit" value="Submit" id="btnWithdraw">Withdraw</button>
+                    <div class="msgWithdraw"></div>
+                </div>
+
+                <div id="transfer">
+                    <h2>
+                        Transfer
+                    </h2>
+                    <label for="transferFrom">From:</label>
+                    <select id="transferFrom">
+                        <option value="Wanjiru">Wanjiru</option>
+                        <option value="Juma">Juma</option>
+                        <option value="Linda">Linda</option>
+                    </select>
+                    <label for="transferTo">To:</label>
+                    <select id="transferTo">
+                        <option value="Wanjiru">Wanjiru</option>
+                        <option value="Juma">Juma</option>
+                        <option value="Linda">Linda</option>
+                    </select> <br>
+                    <input type="number" id="amountTransfer" placeholder="Amount" required>
+                    <button type="submit" value="Submit" id="btnTransfer">Transfer</button>
+                    <div class="msgTransfer"></div>
+                </div>
+            </div>
+
+        </div>
+        <div id="acctBalance">
+
+            <span class="wrap"></span>
+            </a>
+            <h2>
+                Total Balance
+            </h2>
+            <div class="flex-column">
+                <div class="balances">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="modules" src="./index.js"></script>
 </body>
+
 </html>

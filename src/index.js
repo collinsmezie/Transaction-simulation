@@ -30,13 +30,18 @@ class Account {
 const accounts = new Account();
 const deposit = () => {
   btnDeposit.addEventListener('click', () => {
+    if (amountAdded.value === '') {
+      msgDeposit.innerHTML = 'Enter Amount';
+      msgDeposit.style.color = 'red';
+      return;
+    }
+
     const users = JSON.parse(localStorage.getItem('accountUsers'));
     users.map((user) => {
       if (user.name === accName.value) {
         user.balance += Number(amountAdded.value);
         msgDeposit.innerHTML = 'Success!';
-        msgDeposit.style.color = "green"
-
+        msgDeposit.style.color = 'green';
       }
     });
     localStorage.setItem('accountUsers', JSON.stringify(users));
@@ -45,21 +50,24 @@ const deposit = () => {
 };
 deposit();
 
-
 const withdraw = () => {
   btnWithdraw.addEventListener('click', () => {
+    if (amountWithdrawed.value === '') {
+      msgWithdraw.innerHTML = 'Enter Amount';
+      msgWithdraw.style.color = 'red';
+      return;
+    }
+
     const users = JSON.parse(localStorage.getItem('accountUsers'));
     users.map((user) => {
       if (user.name === userWithdraw.value) {
         if (user.balance >= Number(amountWithdrawed.value)) {
           user.balance -= Number(amountWithdrawed.value);
           msgWithdraw.innerHTML = 'Withdraw Successful!';
-          msgWithdraw.style.color = "green"
-
+          msgWithdraw.style.color = 'green';
         } else {
           msgWithdraw.innerHTML = 'Insufficient funds';
-          msgWithdraw.style.color = "red"
-
+          msgWithdraw.style.color = 'red';
         }
       }
     });
@@ -83,32 +91,24 @@ const transfer = (sender, receipient) => {
       }
     });
 
-    if(amountTransfer.value === ""){
-       msgTransfer.innerHTML = 'Enter Amount';
-       msgTransfer.style.color = "red"
-
-
-    }else if (sender.value === receipient.value) {
-       msgTransfer.innerHTML = 'Please Select another Recipient';
-       msgTransfer.style.color = "red"
-
-      
-    }else if (storeSender.balance < Number(amountTransfer.value)) {
-        msgTransfer.innerHTML = 'Insufficient funds';
-        msgTransfer.style.color = "red"
-
-        
-    }else {
-        storeSender.balance -= Number(amountTransfer.value);
-        storeReceipient.balance += Number(amountTransfer.value);
-        msgTransfer.innerHTML = 'Transfer Successful!';
-        msgTransfer.style.color = "green"
-        localStorage.setItem('accountUsers', JSON.stringify(users));
-        displayBalance();
+    if (sender.value === receipient.value) {
+      msgTransfer.innerHTML = 'Please Select another Recipient';
+      msgTransfer.style.color = 'red';
+    } else if (amountTransfer.value === '') {
+      msgTransfer.innerHTML = 'Enter Amount';
+      msgTransfer.style.color = 'red';
+    } else if (storeSender.balance < Number(amountTransfer.value)) {
+      msgTransfer.innerHTML = 'Insufficient funds';
+      msgTransfer.style.color = 'red';
+    } else {
+      storeSender.balance -= Number(amountTransfer.value);
+      storeReceipient.balance += Number(amountTransfer.value);
+      msgTransfer.innerHTML = 'Transfer Successful!';
+      msgTransfer.style.color = 'green';
+      localStorage.setItem('accountUsers', JSON.stringify(users));
+      displayBalance();
     }
-    
-      });
-
+  });
 };
 transfer(transferFrom, transferTo);
 

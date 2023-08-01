@@ -13,8 +13,8 @@ const amountTransfer = document.querySelector('#amountTransfer');
 const balanceDiv = document.querySelector('.balances');
 const msgDeposit = document.querySelector('.msgDeposit');
 const msgWithdraw = document.querySelector('.msgWithdraw');
+const showAmountInWords = document.querySelector('.showAmountInWords');
 const msgTransfer = document.querySelector('.msgTransfer');
-
 class Account {
   constructor() {
     const accountUsers = [
@@ -40,7 +40,7 @@ const deposit = () => {
     users.map((user) => {
       if (user.name === accName.value) {
         user.balance += Number(amountAdded.value);
-        msgDeposit.innerHTML = 'Success!';
+        msgDeposit.innerHTML = 'Deposit Successful!';
         msgDeposit.style.color = 'green';
       }
     });
@@ -63,7 +63,7 @@ const withdraw = () => {
       if (user.name === userWithdraw.value) {
         if (user.balance >= Number(amountWithdrawed.value)) {
           user.balance -= Number(amountWithdrawed.value);
-          msgWithdraw.innerHTML = 'Withdraw Successful!';
+          msgWithdraw.innerHTML = 'Withdrawal Successful!';
           msgWithdraw.style.color = 'green';
         } else {
           msgWithdraw.innerHTML = 'Insufficient funds';
@@ -88,6 +88,7 @@ const transfer = (sender, receipient) => {
         storeSender = user;
       } else if (receipient.value === user.name) {
         storeReceipient = user;
+        console.log(storeReceipient,storeSender)
       }
     });
 
@@ -107,6 +108,12 @@ const transfer = (sender, receipient) => {
       msgTransfer.style.color = 'green';
       localStorage.setItem('accountUsers', JSON.stringify(users));
       displayBalance();
+      const amountInWords = document.createElement('p');
+      showAmountInWords.innerHTML = '';
+      showAmountInWords.style.color = 'green';
+      amountInWords.innerText = `${storeSender.name} just tranferred ${numberToWord(amountTransfer.value )} naira to ${storeReceipient.name} `
+      showAmountInWords.appendChild(amountInWords);
+
     }
   });
 };
@@ -117,8 +124,69 @@ const displayBalance = () => {
   const newDiv = document.createElement('ol');
   balanceDiv.innerHTML = '';
   users.forEach((user) => {
-    newDiv.innerHTML += `<li>Account Name: ${user.name}, Balance: ${user.balance}</li>`;
+    newDiv.innerHTML += `<li>${user.name} Balance - ${user.balance}</li>`;
   });
   balanceDiv.appendChild(newDiv);
 };
 displayBalance();
+
+function numberToWord(number) {
+  const singleDigits = [
+    "", "one", "two", "three", "four",
+    "five", "six", "seven", "eight", "nine"
+  ];
+
+  const teenNumbers = [
+    "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+    "sixteen", "seventeen", "eighteen", "nineteen"
+  ];
+
+  const tens = [
+    "", "", "twenty", "thirty", "forty", "fifty",
+    "sixty", "seventy", "eighty", "ninety"
+  ];
+
+  const bigNumbers = [
+    "", "thousand", "million", "billion"
+  ];
+
+  function convertLessThanThousand(num) {
+    if (num === 0) {
+      return "";
+    } else if (num < 10) {
+      return singleDigits[num];
+    } else if (num < 20) {
+      return teenNumbers[num - 11];
+    } else if (num < 100) {
+      const ten = tens[Math.floor(num / 10)];
+      const unit = singleDigits[num % 10];
+      return `${ten}${unit ? "-" + unit : ""}`;
+    } else {
+      const hundred = `${singleDigits[Math.floor(num / 100)]} hundred`;
+      const remainder = convertLessThanThousand(num % 100);
+      return `${hundred}${remainder ? " " + remainder : ""}`;
+    }
+  }
+
+  if (number === 0) {
+    return "zero";
+  }
+
+  if (number < 0 || number > 1000000000) {
+    return "Number out of range";
+  }
+
+  let word = "";
+  let currentNumber = number;
+  for (let i = bigNumbers.length - 1; i >= 0; i--) {
+    const divisor = Math.pow(1000, i);
+    const quotient = Math.floor(currentNumber / divisor);
+    currentNumber %= divisor;
+    if (quotient > 0) {
+      const remainder = convertLessThanThousand(quotient);
+      word += `${remainder} ${bigNumbers[i]} `;
+    }
+  }
+
+  return word.trim();
+}
